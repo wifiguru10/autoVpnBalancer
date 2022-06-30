@@ -239,6 +239,22 @@ for mx in MXnets_inscope:
                 TAGS[groupTag] = db.appliance.getNetworkApplianceVpnSiteToSiteVpn(mx['id'])
                 if 'subnets' in TAGS[groupTag]: TAGS[groupTag].pop('subnets') #remove localy significant subnets, get just the hubIDs
 
+print()
+print(f"Active Tags:")
+for tag in TAGS:
+    print(f"\t[{tag}]")
+    print(f"\t\tSpoke Configuration[{TAGS[tag]}]")
+
+print()
+print(f"Tagged Networks:")
+for tag in TAGS:
+    print(f"\t[{tag}]")
+    currentNets = []
+    for mx in MXnets_inscope:
+        if tag in mx['tags']:
+            currentNets.append(mx['name'])
+    print(f"\t\tNetworks Tagged {currentNets} ")    
+
 for mx in MXnets_inscope:
     if not 'golden' in mx['tags']:
         groupTag = getInscope(mx['tags'])
@@ -253,6 +269,7 @@ for mx in MXnets_inscope:
                 print(f"Current[{currentVPN}]  Target[{targetVPN}]")
                 db.appliance.updateNetworkApplianceVpnSiteToSiteVpn(mx['id'], **targetVPN)
                 print(f"Configured Network {mx['name']} With tags[{mx['tags']}] ")
-            
+        
+
 
 
